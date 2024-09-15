@@ -7,7 +7,7 @@ DELIMITER $$
 
 -- Creación de evento que modifica el estado del carnet
 CREATE EVENT actualizarEstadoCarnet
-    ON SCHEDULE EVERY 1 SECOND
+    ON SCHEDULE EVERY 1 DAY
     DO
 BEGIN
 
