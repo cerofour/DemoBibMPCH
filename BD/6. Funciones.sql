@@ -4,7 +4,7 @@ DELIMITER $$
 
 CREATE FUNCTION prestamos_realizados_mes_yr (
 	mes TINYINT,
-    yr SMALLINT,
+    yr SMALLINT
 ) RETURNS BIGINT
 DETERMINISTIC
 BEGIN
@@ -12,10 +12,10 @@ BEGIN
 	
     SELECT COUNT(id_prestamo) INTO total_prestamos
     FROM prestamos 
-    WHERE MONTH(fecha_inicio) = mes AND YEAR(fecha_inicio) = yr;
+    WHERE MONTH(fecha_inicial) = mes AND YEAR(fecha_inicial) = yr;
     
     RETURN total_prestamos;
 
-END
+END $$
 
 DELIMITER ;

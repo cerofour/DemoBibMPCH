@@ -22,11 +22,11 @@ BEGIN
     
     -- Por medio de una consulta se consigue el id_tipo_estado_carnet
     SET id_tipo_estado_carnet = (
-		SELECT TP_STD.id_tipo_estado FROM usuarios_clientes AS USR 
+		SELECT TP_STD.id_tipo_estado FROM usuarios AS USR
         INNER JOIN clientes AS CLN ON USR.cliente_id = CLN.id_cliente
         INNER JOIN carnets AS CRN ON CLN.carnet_id = CRN.id_carnet
         INNER JOIN tipos_estados AS TP_STD ON CRN.tipo_estado_id = TP_STD.id_tipo_estado
-        WHERE USR.id_usuario_cliente = NEW.usuario_cliente_id
+        WHERE USR.id_usuario = NEW.usuario_id
     );
     
     -- Por medio de una consulta se consigue el estado del carnet
