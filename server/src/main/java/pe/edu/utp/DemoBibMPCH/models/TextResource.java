@@ -9,6 +9,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "recursos_textuales")
@@ -73,6 +75,15 @@ public class TextResource {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private TextResourceType type;
 
+    @ManyToMany
+    @JoinTable(
+            name = "recursos_textuales_autores",
+            joinColumns = @JoinColumn(name = "recurso_textual_id"),
+            inverseJoinColumns = @JoinColumn(name = "autor_id"))
+    @JsonManagedReference
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Set<Author> writtenBy = new HashSet<>();
+
     @Setter
     @Getter
     @ManyToOne(fetch = FetchType.LAZY)
@@ -80,6 +91,7 @@ public class TextResource {
     @JsonManagedReference
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Editorial editorial;
+
 
     public TextResource() {
     }

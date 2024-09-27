@@ -30,3 +30,8 @@
 .login-form > div {
 	margin-bottom: 15px;
 }
+
+.book-group-container {
+	width: 80%;
+	margin:auto;
+}

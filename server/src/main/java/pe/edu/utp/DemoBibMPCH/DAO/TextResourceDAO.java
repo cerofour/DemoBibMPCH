@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pe.edu.utp.DemoBibMPCH.models.TextResource;
 
 @Repository
-public interface TextDAO extends JpaRepository<TextResource, Long> {
+public interface TextResourceDAO extends JpaRepository<TextResource, Long> {
 }
