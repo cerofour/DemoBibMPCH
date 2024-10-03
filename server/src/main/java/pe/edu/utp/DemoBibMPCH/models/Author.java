@@ -1,5 +1,6 @@
 package pe.edu.utp.DemoBibMPCH.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -33,7 +34,8 @@ public class Author {
     @Column(name = "seudonimo")
     private String alias;
 
-    @ManyToMany(mappedBy = "writtenBy")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "writtenBy")
+    @JsonIgnoreProperties("textResources")
     private Set<TextResource> writes = new HashSet<>();
 
     public Author() {

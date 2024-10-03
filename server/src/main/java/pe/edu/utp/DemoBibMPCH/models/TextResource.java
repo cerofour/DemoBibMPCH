@@ -75,13 +75,13 @@ public class TextResource {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private TextResourceType type;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "recursos_textuales_autores",
             joinColumns = @JoinColumn(name = "recurso_textual_id"),
-            inverseJoinColumns = @JoinColumn(name = "autor_id"))
-    @JsonManagedReference
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+            inverseJoinColumns = @JoinColumn(name = "autor_id")
+    )
+    @Getter
     private Set<Author> writtenBy = new HashSet<>();
 
     @Setter

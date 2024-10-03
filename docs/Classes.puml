@@ -1,0 +1,246 @@
+@startuml BibMpch
+
+left to right direction
+
+package "pe.edu.utp.DemoBibMPCH.models" {
+    
+    class Author {
+        - Long id
+        - String name
+        - String pLastName
+        - String mLastName
+        - String alias
+        - Set<TextResource> writes
+        + Author()
+    }
+
+    class Editorial {
+        - Long id
+        - String editorial
+        + Editorial()
+    }
+
+    class TextResource {
+        - Long id
+        - String title
+        - Date publication_date
+        - Long stock
+        - Long pages
+        - Short edition
+        - Short volume
+        - TextResourceType type
+        - Editorial editorial
+        - Set<Author> writtenBy
+        + TextResource()
+    }
+
+	class TextLoan {
+		- Long id
+		- Long user_id
+		- Long text_resource_id
+		- Long loan_type_id
+		- Long loan_state_id
+		- Date start_date
+		- Date programmed_date
+		- Date end_date
+
+		+ TextLoan()
+	}
+	TextLoan "1" -- "0..*" Client : realizado por >
+	TextLoan "1" -- "0..*" TextResource : presta >
+	TextLoan "1" -- "1..*" LoanType : de tipo >
+	TextLoan "1" -- "1..*" LoanState : estado >
+
+	class LoanType {
+		- Long id
+		- String loan_type
+
+		+ LoanType()
+	}
+
+	class LoanState {
+		- Long id
+		- String loan_state
+
+		+ LoanState()
+	}
+
+    class TextResourceType {
+        - Long id
+        - String text_type
+        + TextResourceType()
+    }
+
+	class Carnet {
+		- Long id
+		- String code
+		- Date issue_date
+		- Date expiration_date
+		- CarnetState state
+
+		+ Carnet()
+	}
+
+	class CarnetState {
+		- Long id
+		- String description
+		- boolean active
+
+		+ CarnetState()
+	}
+	Carnet "1" -- "1" CarnetState : tiene el estado > 
+
+	class User {
+		- Long id
+		- UserRole role
+		- String document
+		- DocumentType document_type
+		- String hashed_psk
+
+		+ User()
+	}
+
+	class DocumentType {
+		- Long id
+		- String document_type
+
+		+ DocumentType()
+	}
+
+	class UserRole {
+		- Long id
+		- String description
+
+		+ UserRole()
+	}
+	User "1"  -- "1" UserRole : tiene el rol >
+	User "1" -- "1" DocumentType : su documento es de tipo >
+
+	class Client {
+		- Long id
+		- String name
+		- String m_lastName
+		- String p_lastName
+		- String email
+		- String telephone
+		- Carnet carnet
+		- EducationLevel education_level
+		- Gender gender
+		- User user
+		- ClientAddress address
+
+		+ Client()
+	}
+	Client "1" -- Carnet : posee un carnet >
+	Client "1" -- User : se asocia a un >
+	Client "1" -- "0..*" ClientAddress : localizado en >
+
+	class ClientAddress {
+		- Long id
+		- Long district_id
+		- String address
+
+		+ ClientAddress()
+	}
+	ClientAddress "1" -- "0..*" District : localizada en >
+
+	class District {
+		- Long id
+		- Long province_id
+		- String district
+
+		+ District()
+	}
+	District "1" -- "0..*" Province : localizado en >
+
+	class Province {
+		- Long id
+		- Long region_id 
+		- String province 
+
+		+ Province()
+	}
+	Province "1" -- "0..*" Region : localizada en >
+
+	class Region {
+		- Long id
+		- Long country_id
+		- String region 
+
+		+ Region()
+	}
+	Region "1" -- "0..*" Country : localizada en >
+
+	class Country {
+		- Long id
+		- String country
+
+		+ Country()
+	}
+
+    Author "1" -- "0..*" TextResource : escribe >
+    TextResource "1" -- "0..*" Editorial : editado por >
+    TextResource "1" -- "0..1" TextResourceType : es de tipo >
+    TextResource "0.." -- "0.." Author : escrito por >
+}
+
+package "pe.edu.utp.DemoBibMPCH.controllers" {
+    
+    class AuthorController {
+        - AuthorDAO authorDAO
+        + getAuthor(id: Long): Optional<Author>
+        + getAuthors(id: Long): List<Author>
+		+ getByFullname(name: String): Optional<Author>
+		+ addAuthor(author: Author): void
+    }
+
+    class TextResourceController {
+        - TextResourceDAO textDAO
+        + getText(id: Long): Optional<TextResource>
+		+ getTexts(): List<TextResource>
+		+ getByCode(code: String): Optional<Code>
+		+ getByAuthor(id: Long): List<TextResource>
+		+ addText(text: TextResource): void
+    }
+
+	class UserController {
+		+ getUser(id: Long): Optional<User>
+		+ getUsers(): List<Users>
+		+ getByDocument(doc: String): User
+		+ getByFullname(fullname: String): Optional<User>
+		+ addUser(u: User): void
+	}
+}
+
+package "pe.edu.utp.DemoBibMPCH.DAO" {
+    
+    interface AuthorDAO {
+        + findAll(): List<Author>
+        + findById(id: Long): Optional<Author>
+		+ save(a: Author)
+    }
+
+    interface TextResourceDAO {
+        + findAll(): List<TextResource>
+        + findById(id: Long): Optional<TextResource>
+		+ save(t: TextResource)
+    }
+
+	interface UserDAO {
+		+ findAll(): List<User>
+		+ findById(id: Long): Optional<User>
+		+ save(u: User)
+	}
+}
+
+' Relationships between controllers and DAOs
+AuthorController --> AuthorDAO : utiliza >
+TextResourceController --> TextResourceDAO : utiliza >
+UserController --> UserDAO : utiliza >
+
+' Relationships between DAOs and Models
+AuthorDAO --> Author : modifica >
+TextResourceDAO --> TextResource : modifia >
+UserDAO --> User: modifica >
+
+@enduml
