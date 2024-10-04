@@ -210,6 +210,20 @@ package "pe.edu.utp.DemoBibMPCH.controllers" {
 		+ getByFullname(fullname: String): Optional<User>
 		+ addUser(u: User): void
 	}
+
+	class EditorialController {
+	    + ResponseEntity<List<Editorial>> getEditorials(Optional<Long> id)
+	    + ResponseEntity<Editorial> createEditorial(Editorial editorial)
+	    + ResponseEntity<Editorial> updateEditorial(Long id, Editorial updatedEditorial)
+	    + ResponseEntity<Void> deleteEditorial(Long id)
+	}
+	EditorialController --> EditorialDAO : "Dependency"
+
+	class TextResourceTypeController {
+		+ deleteTextResourceType(id: Long): ResponseEntity<Void>
+		+ createTextResourceType(t: @RequestBody TextResourceType): ResponseEntity<TextResourceType>
+	}
+	TextResourceTypeController --> TextResourceTypeDAO : "Dependency"
 }
 
 package "pe.edu.utp.DemoBibMPCH.DAO" {
@@ -231,6 +245,22 @@ package "pe.edu.utp.DemoBibMPCH.DAO" {
 		+ findById(id: Long): Optional<User>
 		+ save(u: User)
 	}
+
+
+	interface EditorialDAO {
+		+ findAll(): List<Editorial>
+		+ findById(id: Long): Optional<Editorial>
+		+ save(u: Editorial)
+	}
+	EditorialDAO --> Editorial
+
+
+	interface TextResourceTypeDAO {
+		+ findAll(): List<TextResourceType>
+		+ findById(id: Long): Optional<TextResourceType>
+		+ save(u: TextResourceType)
+	}
+	TextResourceTypeDAO --> TextResourceType
 }
 
 ' Relationships between controllers and DAOs
